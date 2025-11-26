@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timothy Johnstone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden; /* Allow vertical scroll for content */
+            transition: background-color 0.5s ease;
+        }
+
+        /* Canvas positioning */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Glassmorphism Card - Adaptive */
+        .glass-card {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark Mode Glass */
+        .dark .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .dark .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Light Mode Glass */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Text selection color */
+        ::selection {
+            background: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-500 { animation-delay: 0.5s; }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-[#0f172a] dark:text-slate-200 transition-colors duration-500 min-h-screen">
+
+    <!-- Interactive Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="fixed top-6 right-6 z-50 p-3 rounded-full glass-card hover:scale-110 transition-transform cursor-pointer group" aria-label="Toggle Theme">
+        <i data-lucide="moon" class="hidden dark:block w-5 h-5 text-cyan-400"></i>
+        <i data-lucide="sun" class="block dark:hidden w-5 h-5 text-amber-500"></i>
+    </button>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 w-full max-w-5xl mx-auto px-6 py-12 md:py-20 flex flex-col gap-12">
+        
+        <!-- Profile Card -->
+        <div class="glass-card rounded-3xl p-8 md:p-12 animate-fade-in flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start">
+            
+            <!-- Profile Photo Frame -->
+            <div class="shrink-0 relative group">
+                <div class="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-white/20 dark:border-white/10 shadow-2xl relative z-10 bg-slate-200 dark:bg-slate-800">
+                    <!-- Placeholder Image - Replace 'src' with your actual photo URL -->
+                    <img src="assets/TJ_pic.jpg" 
+                         alt="Timothy Johnstone" 
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-90 hover:opacity-100">
+                </div>
+                <!-- Decorative Ring -->
+                <div class="absolute inset-0 -m-2 rounded-full border border-cyan-500/30 border-dashed animate-[spin_10s_linear_infinite] pointer-events-none"></div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="space-y-6 text-center md:text-left flex-1">
+                <div class="space-y-2">
+                    <p class="text-cyan-600 dark:text-cyan-400 text-sm tracking-[0.2em] uppercase font-bold animate-fade-in delay-100">
+                        Builder, Scientist, & Mentor
+                    </p>
+                    <h1 class="text-4xl md:text-6xl font-light tracking-tight text-slate-900 dark:text-white animate-fade-in delay-200">
+                        Timothy <span class="font-semibold text-slate-500 dark:text-slate-400">Johnstone</span>
+                    </h1>
+                </div>
+
+                <div class="h-px w-full bg-gradient-to-r from-cyan-500/50 to-transparent my-6 animate-fade-in delay-300"></div>
+
+                <div class="text-lg text-slate-600 dark:text-slate-300 font-light leading-relaxed space-y-4 animate-fade-in delay-300">
+                    <p>
+                        Hi, I'm Tim. I build systems at the intersection of <strong class="text-cyan-600 dark:text-cyan-400 font-medium">Computational Biology</strong>, <strong class="text-purple-600 dark:text-purple-400 font-medium">Cloud Architecture</strong>, and <strong class="text-amber-600 dark:text-amber-400 font-medium">Data Science</strong>.
+                    </p>
+                    <p class="text-base">
+                        I really enjoy solving the tricky algorithmic puzzles that help accelerate scientific discovery. From architecting complex cloud systems from scratch, to engineering robust pipelines for NGS data, my goal is always to empower teams to turn code into cures.
+                    </p>
+                </div>
+
+                <!-- Action Links -->
+                <div class="pt-6 flex flex-wrap gap-4 justify-center md:justify-start items-center animate-fade-in delay-300">
+                    <a href="https://github.com/tgjohnst" target="_blank" rel="noopener noreferrer" 
+                       class="flex items-center gap-2 px-5 py-3 rounded-full bg-slate-900/5 dark:bg-white/5 hover:bg-slate-900/10 dark:hover:bg-white/10 border border-slate-900/10 dark:border-white/5 transition-all hover:scale-105">
+                        <i data-lucide="github" class="w-4 h-4"></i>
+                        <span class="font-medium">Check out my code on GitHub</span>
+                    </a>
+
+                    <a href="https://www.linkedin.com/in/timjohnstone/" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center gap-2 px-5 py-3 rounded-full bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/10 text-blue-600 dark:text-blue-400 transition-all hover:scale-105">
+                        <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        <span class="font-medium">Let's connect on LinkedIn</span>
+                    </a>
+                    
+                    <a href="mailto:timothy.g.johnstone@gmail.com" 
+                       class="flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-cyan-400/10 via-amber-200/10 to-purple-400/10 dark:from-cyan-900/20 dark:via-amber-900/20 dark:to-purple-900/20 border border-cyan-400/20 dark:border-cyan-400/10 shadow-lg hover:bg-cyan-400/20 dark:hover:bg-cyan-900/30 text-slate-500 dark:text-cyan-300 font-semibold text-sm tracking-wide transition-all hover:scale-105 group">
+                        <i data-lucide="mail" class="w-4 h-4 text-cyan-500 dark:text-cyan-400 group-hover:animate-bounce"></i>
+                        <span class="uppercase tracking-widest">Drop Me A Line</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Highlights Section -->
+        <div class="space-y-6 animate-fade-in delay-500">
+            <h2 class="text-2xl font-light text-slate-800 dark:text-white border-l-4 border-cyan-500 pl-4">What I Love Working On</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: Bioinformatics (Cyan) -->
+                <div class="glass-card p-6 rounded-2xl group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-12 h-12 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center mb-4 text-cyan-600 dark:text-cyan-400">
+                        <i data-lucide="dna" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-100">Bioinformatics</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        I'm deep into solving mysteries in RNA/DNA genomics, from processing raw sequence data to building the pipelines and visualizations that make sense of it.
+                    </p>
+                </div>
+
+                <!-- Card 2: Cloud Architecture (Purple) -->
+                <div class="glass-card p-6 rounded-2xl group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-4 text-purple-600 dark:text-purple-400">
+                        <i data-lucide="cloud" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-100">Cloud Architecture</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        I love the puzzle of engineering complex systems in the cloud (AWS) to help biology happen at scale — whether that's compute, massive storage, or networking.
+                    </p>
+                </div>
+
+                <!-- Card 3: AI & ML (Amber) -->
+                <div class="glass-card p-6 rounded-2xl group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-12 h-12 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mb-4 text-amber-600 dark:text-amber-400">
+                        <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-100">AI & ML</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        I enjoy exploring how modern AI and data tooling can transform data science, always keeping a sharp eye on data quality and real-world utility.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center text-slate-500 dark:text-slate-600 text-xs font-light tracking-widest py-8">
+            &copy; <script>document.write(new Date().getFullYear())</script> TIMOTHY JOHNSTONE | Hosted on AWS
+        </footer>
+
+    </main>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Theme Toggle Logic
+        const html = document.documentElement;
+        let isDark = true;
+
+        function toggleTheme() {
+            isDark = !isDark;
+            if (isDark) {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+            // Trigger color update in canvas
+            updateCanvasTheme();
+        }
+
+        // Canvas Animation
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        // Theme Colors
+        const themes = {
+            dark: {
+                bgStart: '#0f172a', // Slate 900
+                bgEnd: '#020617',   // Slate 950
+                particle: 'rgba(148, 163, 184, ', // Slate 400
+                line: '56, 189, 248' // Cyan
+            },
+            light: {
+                bgStart: '#f8fafc', // Slate 50
+                bgEnd: '#e2e8f0',   // Slate 200
+                particle: 'rgba(100, 116, 139, ', // Slate 500
+                line: '14, 165, 233' // Sky 500
+            }
+        };
+
+        let currentTheme = themes.dark;
+
+        function updateCanvasTheme() {
+            currentTheme = isDark ? themes.dark : themes.light;
+        }
+
+        // Configuration
+        const particleCount = window.innerWidth < 768 ? 40 : 80;
+        const connectionDistance = 150;
+        const mouseDistance = 250;
+
+        let mouse = { x: null, y: null };
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', () => {
+            resize();
+            initParticles();
+        });
+        
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < mouseDistance) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouseDistance - distance) / mouseDistance;
+                        const directionX = forceDirectionX * force * 1.5;
+                        const directionY = forceDirectionY * force * 1.5;
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = currentTheme.particle + '0.4)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw Gradient
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, currentTheme.bgStart);
+            gradient.addColorStop(1, currentTheme.bgEnd);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        let opacity = 1 - (distance / connectionDistance);
+                        ctx.strokeStyle = `rgba(${currentTheme.line}, ${opacity * 0.15})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        resize();
+        initParticles();
+        animate();
+
+    </script>
+</body>
+</html>
